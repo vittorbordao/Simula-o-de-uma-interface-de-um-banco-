@@ -1,0 +1,85 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Estrutura que representa uma conta bancária
+typedef struct {
+    char nome[50];
+    float saldo;
+    float limite;
+    float extrato[100];
+    int num_transacoes;
+} Conta;
+
+// Função para exibir o saldo atual da conta
+void verSaldo(Conta *conta) {
+    printf("Saldo atual: R$ %.2f\n", conta->saldo);
+}
+
+// Função para exibir o extrato da conta
+void verExtrato(Conta *conta) {
+    printf("Extrato:\n");
+    for (int i = 0; i < conta->num_transacoes; i++) {
+        printf("Transação %d: R$ %.2f\n", i + 1, conta->extrato[i]);
+    }
+}
+
+// Função para exibir o limite da conta
+void verLimite(Conta *conta) {
+    printf("Limite: R$ %.2f\n", conta->limite);
+}
+
+// Função para adicionar uma transação à conta
+void adicionarTransacao(Conta *conta, float valor) {
+    if (conta->num_transacoes < 100) {
+        conta->extrato[conta->num_transacoes] = valor;
+        conta->num_transacoes++;
+        conta->saldo += valor;
+    } else {
+        printf("Limite de transações atingido.\n");
+    }
+}
+
+int main() {
+    // Inicializa a conta com valores padrão
+    Conta minhaConta;
+    strcpy(minhaConta.nome, "Usuário");
+    minhaConta.saldo = 1000.0;
+    minhaConta.limite = 500.0;
+    minhaConta.num_transacoes = 0;
+
+    int opcao;
+    float valor;
+
+    // Loop principal do menu
+    do {
+        printf("\n1. Ver Saldo\n2. Ver Extrato\n3. Ver Limite\n4. Adicionar Transação\n5. Sair\n");
+        printf("Escolha uma opção: ");
+        scanf("%d", &opcao);
+
+        // Executa a ação escolhida pelo usuário
+        switch (opcao) {
+            case 1:
+                verSaldo(&minhaConta);
+                break;
+            case 2:
+                verExtrato(&minhaConta);
+                break;
+            case 3:
+                verLimite(&minhaConta);
+                break;
+            case 4:
+                printf("Digite o valor da transação: ");
+                scanf("%f", &valor);
+                adicionarTransacao(&minhaConta, valor);
+                break;
+            case 5:
+                printf("Saindo...\n");
+                break;
+            default:
+                printf("Opção inválida.\n");
+        }
+    } while (opcao != 5);
+
+    return 0;
+}
